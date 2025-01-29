@@ -38,11 +38,15 @@ cd Drawry-FrontEnd
 ```sh
 npm install
 ```
+---
+
 ## 📁 프로젝트 구조
 
 [작성예정]
 
-## 🛠️ Docker 실행 방법
+---
+
+## 🐳 Docker 실행 방법
 ``` sh
 docker build -t drawry-frontend .
 docker run -p 5173:5173 drawry-frontend
