@@ -1,0 +1,18 @@
+services:
+  frontend:
+    container_name: vue_frontend
+    build: ./my-vue-app  # Dockerfile이 있는 폴더로 변경
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./my-vue-app:/app  # 로컬 코드 → 컨테이너 내부 반영
+      - /app/node_modules  # node_modules 충돌 방지
+    networks:
+      - my_project_network
+    stdin_open: true
+    tty: true
+
+networks:
+  my_project_network:
+    name: my_project_network
+    driver: bridge
