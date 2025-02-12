@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한글 단어 찾기 게임</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <div id="gameContainer">
+            <div id="inputContainer" class="input-container">
+                <label for="userWord">공부할 단어를 입력 해주세요 (1~4글자):</label>
+                <input 
+                    type="text" 
+                    id="userWord" 
+                    maxlength="4" 
+                    autocomplete="off"
+                >
+                <button 
+                    type="button" 
+                    id="startButton"
+                >🎮 게임 시작</button>
+            </div>
+            
+            <div id="grid" class="grid hidden"></div>
+            
+            <div id="gameInstructions" class="game-instructions hidden">
+                <p>🎯 정답 단어가 가로, 세로, 또는 대각선으로 숨어있어요!</p>
+                <p>👆 글자를 클릭해서 정답을 찾아보세요.</p>
+            </div>
+
+            <button 
+                type="button" 
+                id="resetButton" 
+                class="hidden"
+            >🔄 다시 시작</button>
+            
+            <div id="congratsMessage" class="hidden">
+                정답입니다!
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

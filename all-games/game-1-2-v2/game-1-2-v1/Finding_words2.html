@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한글 단어 찾기 게임</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 90px);
+            grid-template-rows: repeat(5, 90px);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border: 1px solid black;
+            font-size: 72px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: lightgreen;
+        }
+        .wrong {
+            background-color: lightcoral;
+        }
+        #resetButton {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #congratsMessage {
+            display: none;
+            margin-top: 20px;
+            font-size: 36px;
+            color: green;
+        }
+        #inputContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        #userWord {
+            width: 300px;
+            height: 60px;
+            font-size: 30px;
+            text-align: center;
+        }
+        label {
+            font-size: 48px;
+        }
+        button {
+            font-size: 42px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="inputContainer">
+        <label for="userWord">공부할 단어를 입력 해주세요 (1~4글자):</label>
+        <input type="text" id="userWord" maxlength="4">
+        <button onclick="startGame()">🎮 게임 시작</button>
+    </div>
+    
+    <div class="grid" id="grid"></div>
+    <button id="resetButton" onclick="resetGame()">🔄 다시 시작</button>
+    <div id="congratsMessage">와우!! 정말 대단해!! ^^</div>
+
+    <script>
+        let correctWord = [];
+        let correctGuesses = new Set();
+        let generatedWords = ["닭", "달", "탈", "칼", "칼", "깔", "날", "난", "란", "쌀", "쌀", "살", "산", "삶", "담", "댐", "땀", "남", "낸", "밤", "밥", "팜", "참", "짬", "잠"];
+        const gridSize = 5;
+        const grid = document.getElementById("grid");
+        const resetButton = document.getElementById("resetButton");
+        const congratsMessage = document.getElementById("congratsMessage");
+        const inputContainer = document.getElementById("inputContainer");
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function updateGeneratedWords() {
+            generatedWords = generatedWords.filter(word => !correctWord.includes(word));
+            while (generatedWords.length < 25 - correctWord.length) {
+                let newWord = generateRandomWord();
+                if (!correctWord.includes(newWord)) {
+                    generatedWords.push(newWord);
+                }
+            }
+        }
+
+        function generateRandomWord() {
+            const chars = "닭달탈칼날쌀삶밤잠";
+            return chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        function startGame() {
+            const userInput = document.getElementById("userWord").value.trim();
+            if (userInput.length < 1 || userInput.length > 4) {
+                alert("1~4글자의 단어를 입력해주세요.");
+                return;
+            }
+            correctWord = userInput.split("");
+            correctGuesses.clear();
+            congratsMessage.style.display = "none";
+            inputContainer.style.display = "none";
+            updateGeneratedWords();
+            createGrid();
+            resetButton.style.display = "block";
+        }
+
+        function resetGame() {
+            document.getElementById("userWord").value = "";
+            grid.innerHTML = "";
+            correctWord = [];
+            correctGuesses.clear();
+            resetButton.style.display = "none";
+            congratsMessage.style.display = "none";
+            inputContainer.style.display = "flex";
+        }
+
+        function createGrid() {
+            grid.innerHTML = "";
+            let cells = [];
+            let usedPositions = new Set();
+            shuffleArray(generatedWords);
+            
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.textContent = generatedWords[i % generatedWords.length];
+                cell.addEventListener("click", () => checkAnswer(cell));
+                cells.push(cell);
+                grid.appendChild(cell);
+            }
+            
+            let correctPositions = new Set();
+            while (correctPositions.size < correctWord.length) {
+                let index = Math.floor(Math.random() * (gridSize * gridSize));
+                if (!correctPositions.has(index)) {
+                    correctPositions.add(index);
+                }
+            }
+            
+            let correctPositionsArray = Array.from(correctPositions);
+            for (let i = 0; i < correctWord.length; i++) {
+                cells[correctPositionsArray[i]].textContent = correctWord[i];
+                cells[correctPositionsArray[i]].dataset.correct = correctWord[i];
+            }
+        }
+
+        function checkAnswer(cell) {
+            if (cell.dataset.correct) {
+                cell.textContent = cell.dataset.correct;
+                cell.classList.add("correct");
+                correctGuesses.add(cell.dataset.correct);
+                if (correctGuesses.size === correctWord.length) {
+                    setTimeout(() => {
+                        congratsMessage.style.display = "block";
+                    }, 300);
+                }
+            } else {
+                cell.classList.add("wrong");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+:root {
+    --primary-color: #4A90E2;
+    --primary-hover: #357ABD;
+    --success-color: #4CAF50;
+    --error-color: #F44336;
+    --background-color: #F5F5F5;
+    --cell-color: #FFFFFF;
+    --border-color: #E0E0E0;
+    --text-color: #333333;
+    --cell-size: 90px;
+    --grid-gap: 10px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+main {
+    width: 100%;
+    max-width: 800px;
+}
+
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+#userWord {
+    width: 100%;
+    max-width: 300px;
+    height: 60px;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+}
+
+#userWord:focus {
+    border-color: var(--primary-color);
+}
+
+button {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, var(--cell-size));
+    grid-template-rows: repeat(5, var(--cell-size));
+    gap: var(--grid-gap);
+    padding: 10px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 2.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.cell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cell.correct {
+    background-color: var(--success-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+.cell.wrong {
+    background-color: var(--error-color);
+    color: white;
+    animation: shake 0.5s ease-in-out;
+}
+
+#congratsMessage {
+    font-size: 2rem;
+    color: var(--success-color);
+    text-align: center;
+    padding: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@media (max-width: 600px) {
+    :root {
+        --cell-size: 60px;
+        --grid-gap: 5px;
+    }
+
+    .cell {
+        font-size: 1.8rem;
+    }
+
+    label {
+        font-size: 1.2rem;
+    }
+
+    button {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+    }
+}
+
+.game-instructions {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.game-instructions p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+@media (max-width: 600px) {
+    .game-instructions p {
+        font-size: 1rem;
+    }
+}
